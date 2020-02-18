@@ -164,7 +164,7 @@ int main() {
         cout << "File ready!" << endl;
     }
     
-    while(!inFile.eof()) {
+    while(!inFile.eof() && inventoryItems.unsortedInventory.size() != 10) {
         // while infile end of file and array is not larger than 10. Spit out cant take more data.
         inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
         
@@ -173,6 +173,10 @@ int main() {
         }
         
         inventoryItems.unsortedInventory.push_back(InventoryItems(itemID, itemName, itemQuantity, itemPrice));
+        
+        if (inventoryItems.unsortedInventory.size() == 10) {
+            cout << "This program can only process 10 items at a time" << endl;
+        }
     }
     
     inFile.close();
@@ -219,11 +223,17 @@ int main() {
                     cin >> userSortSelection;
                     cout << "\n";
                     
-                    inventoryItems.Sort(userSortSelection);
+                    if (!cin || userSortSelection > 4) {
+                        cin.clear();
+                        cin.ignore(10, '\n');
+                        cout << "Sorry that is not one of the selections from the menu, please try again.\n" << endl;
+                    } else {
+                        inventoryItems.Sort(userSortSelection);
+                    }
+                    
                     break;
                 case 3:
                     //Search product by ID or name
-                    // Check user input if bad then repeat this menu
                     cout << "Please type the product you want to search?" << endl;
                     cin >> searchInventory;
                     inventoryItems.SearchInventory(searchInventory);
