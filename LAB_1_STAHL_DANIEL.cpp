@@ -5,10 +5,11 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <iomanip>
 
 using namespace std;
 
-class InventoryItems {
+class InventoryItems { // A class for my inventory
 public:
     vector<InventoryItems>unsortedInventory;
     vector<InventoryItems*>sortedInventory;
@@ -25,25 +26,29 @@ public:
         this->itemPrice = itemPrice;
     };
     
-    void PrintUnsortedInventory() {
+    void PrintUnsortedInventory() { // Prints the unsorted array
         cout << "Unsorted inventory:" << endl;
+        cout << left << setw(10)<< "Item ID" <<
+        setw(13) << "Item Name" <<
+        setw(10) << "Quantity" <<
+        setw(10) << "Price" << endl;
+        
         for (int x = 0; x < unsortedInventory.size(); x++) {
-            cout << "Item ID: " << unsortedInventory.at(x).itemID << "\n"
-            << "Product Name: " << unsortedInventory.at(x).itemName << "\n"
-            << "Quantity: " << unsortedInventory.at(x).itemQuantity << "\n"
-            << "Price: " << "$" << unsortedInventory.at(x).itemPrice << endl;
+            cout << left << setw(10)<< unsortedInventory.at(x).itemID
+            << setw(13) << unsortedInventory.at(x).itemName
+            << setw(10) << unsortedInventory.at(x).itemQuantity
+            << "$" << unsortedInventory.at(x).itemPrice << endl;
             cout << "\n";
         }
     };
     
-    // Better parameter place holder
-    void Swap(InventoryItems*& itemA, InventoryItems*& itemB) {
+    void Swap(InventoryItems*& itemA, InventoryItems*& itemB) { // Swaps items in the array
         InventoryItems* temp = itemA;
         itemA = itemB;
         itemB = temp;
     }
     
-    void Sort(int sortChoice) {
+    void Sort(int sortChoice) { // Sorts array of addresses by user input
         bool sortInventory = true;
         
         while (sortInventory) {
@@ -80,23 +85,27 @@ public:
                             sortInventory = true;
                         }
                         break;
-                        
                     default:
                         break;
                 }
             }
         }
         
+        cout << left << setw(10)<< "Item ID" <<
+        setw(13) << "Item Name" <<
+        setw(10) << "Quantity" <<
+        setw(10) << "Price" << endl;
+        
         for (int x = 0; x < sortedInventory.size(); x++) {
-            cout << "Item ID: " << sortedInventory.at(x)->itemID << endl;
-            cout << "Product Name: " << sortedInventory.at(x)->itemName << endl;
-            cout << "Quantity: " << sortedInventory.at(x)->itemQuantity << endl;
-            cout << "Price: " << "$" << sortedInventory.at(x)->itemPrice << endl;
-            cout << endl;
+            cout << left << setw(10)<< sortedInventory.at(x)->itemID
+            << setw(13) << sortedInventory.at(x)->itemName
+            << setw(10) << sortedInventory.at(x)->itemQuantity
+            << "$" << sortedInventory.at(x)->itemPrice << "\n" << endl;
+            
         }
     }
     
-    void SearchInventory(string userSearch) {
+    void SearchInventory(string userSearch) { // Searches array for matching item ID or item name
         for (int x = 0; x < userSearch.size(); x++) {
             userSearch[x] = tolower(userSearch[x]);
         }
@@ -105,28 +114,38 @@ public:
         
         for (int y = 0; y < unsortedInventory.size(); y++) {
             if (userSearch == unsortedInventory.at(y).itemID) {
-                cout << "Found a match in item ID\n"
-                << "Item ID: " << unsortedInventory.at(y).itemID << "\n"
-                << "Product Name: " << unsortedInventory.at(y).itemName << "\n"
-                << "Quantity: " << unsortedInventory.at(y).itemQuantity << "\n"
-                << "Price: " << "$" << unsortedInventory.at(y).itemPrice << endl;
+                cout << "\nFound a match in item ID\n";
+                cout << left << setw(10)<< "Item ID" <<
+                setw(13) << "Item Name" <<
+                setw(10) << "Quantity" <<
+                setw(10) << "Price" << endl;
+                cout << left << setw(10)<< unsortedInventory.at(y).itemID
+                << setw(13) << unsortedInventory.at(y).itemName
+                << setw(10) << unsortedInventory.at(y).itemQuantity
+                << "$" << unsortedInventory.at(y).itemPrice << "\n" << endl;
+            
                 searchFound = true;
             } else if (userSearch == unsortedInventory.at(y).itemName) {
-                cout << "Found a match in product name\n"
-                << "Item ID: " << unsortedInventory.at(y).itemID << "\n"
-                << "Product Name: " << unsortedInventory.at(y).itemName << "\n"
-                << "Quantity: " << unsortedInventory.at(y).itemQuantity << "\n"
-                << "Price: " << "$" << unsortedInventory.at(y).itemPrice << endl;
+                cout << "\nFound a match in product name\n";
+                cout << left << setw(10)<< "Item ID" <<
+                setw(13) << "Item Name" <<
+                setw(10) << "Quantity" <<
+                setw(10) << "Price" << endl;
+                cout << left << setw(10)<< unsortedInventory.at(y).itemID
+                << setw(13) << unsortedInventory.at(y).itemName
+                << setw(10) << unsortedInventory.at(y).itemQuantity
+                << "$" << unsortedInventory.at(y).itemPrice << "\n" << endl;
+
                 searchFound = true;
             }
         }
         
         if (searchFound == false) {
-            cout << "No match found, returning to main menu." << endl;
+            cout << "\nNo match found, returning to main menu.\n" << endl;
         }
     }
     
-    void PrintInventoryReport() {
+    void PrintInventoryReport() { // Prints a report of the entire inventory
         int sumItems = 0;
         double sumPrice = 0;
         int sumQuantity = 0;
@@ -137,9 +156,9 @@ public:
             sumQuantity = unsortedInventory.at(x).itemQuantity + sumQuantity;
         }
 
-        cout << "Number of unique items: " << sumItems << "\n"
+        cout << "\nNumber of unique items: " << sumItems << "\n"
         << "Total quantity in stock: " << sumQuantity << "\n"
-        << "Total worth of inventory: $" << sumPrice << endl;
+        << "Total worth of inventory: $" << sumPrice << "\n" << endl;
     }
 };
 
@@ -165,7 +184,6 @@ int main() {
     }
     
     while(!inFile.eof() && inventoryItems.unsortedInventory.size() != 10) {
-        // while infile end of file and array is not larger than 10. Spit out cant take more data.
         inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
         
         for (int x = 0; x < itemName.size(); x++) {
@@ -185,9 +203,8 @@ int main() {
         inventoryItems.sortedInventory.push_back(&inventoryItems.unsortedInventory.at(x));
     }
     
-    // Menu
-    
-    cout << "Hello, please choose from the menu below" << endl;
+    // Menu Starts
+    cout << "Hello, please choose from the menu below\n" << endl;
     
     do {
         cout << "1) Print unsorted inventory\n"
@@ -197,12 +214,11 @@ int main() {
         << "5) Quit program" << endl;
         cout << "Enter a number: ";
         cin >> userSelection;
-        cout << "\n";
         
-        if (!cin || userSelection > 5) {
+        if (!cin || userSelection > 5) { // Checks if user inout is valid
             cin.clear();
-            cin.ignore(10, '\n');
-            cout << "Sorry that is not one of the selections from the menu, please try again.\n" << endl;
+            cin.ignore(100, '\n');
+            cout << "\nSorry that is not one of the selections from the menu, please try again.\n" << endl;
         } else {
         
         // Switch menu
@@ -213,28 +229,26 @@ int main() {
                     break;
                 case 2:
                     // Print inventory sorted by user choice
-                    // Check user input if bad then repeat this menu
-                    cout << "How would you like to sort the inventory?\n"
+                    cout << "\nHow would you like to sort the inventory?\n"
                     << "1) item ID\n"
                     << "2) item name\n"
                     << "3) quantity on hand\n"
                     << "4) price" << endl;
                     cout << "Enter a number: ";
                     cin >> userSortSelection;
-                    cout << "\n";
                     
-                    if (!cin || userSortSelection > 4) {
+                    if (!cin || userSortSelection > 4) { // Checks if user input is valid
                         cin.clear();
-                        cin.ignore(10, '\n');
-                        cout << "Sorry that is not one of the selections from the menu, please try again.\n" << endl;
+                        cin.ignore(100, '\n');
+                        cout << "\nSorry that is not one of the selections from the menu, please try again.\n" << endl;
                     } else {
                         inventoryItems.Sort(userSortSelection);
                     }
                     
                     break;
                 case 3:
-                    //Search product by ID or name
-                    cout << "Please type the product you want to search?" << endl;
+                    // Search product by ID or name
+                    cout << "\nPlease type the product you want to search?" << endl;
                     cin >> searchInventory;
                     inventoryItems.SearchInventory(searchInventory);
                     break;
@@ -243,41 +257,10 @@ int main() {
                     inventoryItems.PrintInventoryReport();
                     break;
                 default:
+                    cout << "\nSorry that is not one of the selections from the menu, please try again.\n" << endl;
                     break;
             }
         }
         
     } while (userSelection != 5);
 }
-
-/*
- 
- Testing:
- check user input
- check if file is too big
- check if no data in file
- 
- Write a modularized, menu-driven program to read a file with the unknown number of records.
- 
- * [done] The input file has an unknown number of records of inventory items (may be empty); one record per line in the following  order: item ID, item  name (one word), quantity on hand, and a price
- * [done] All fields in the input file are separated by a tab (‘\t’) or a blank (up to you)
- * All items are unique
- * Item Id and name do not require error checking
- * [done] Create a menu (use a switch statement) which allows to
- * [done] print the inventory unsorted
- * [done] print the inventory sorted in ascending order; you should allow a user sort by any field: item ID, item name (one word), quantity on hand, or price. Write one function, that can sort by any field using array of pointers. Do not copy and paste sort code five times into the same function. Bubble sort is the easiest to modify.
- * [done] search for an item by ID or name; a user should be able to enter the name of the item using any case, (for example, sTRolleR). You may wish to store items in all lower/upper case to expedite the search.
- * [done] print a report with the following details
-    - number of unique items in the inventory
-    - the total worth of the inventory and the total count of all items in the inventory
- * [done] quit the program
- A user should be able to run many as many times as a user wants
- Use array of structs if you do not know how to write classes yet
- Thoroughly test your program. Your grade partially depends on the quality of your test data.
- This a and all other  programs in this course must comply with the Guidelines and Standards posted under Resources
- Clearly label the output
- Record sample: 997196478 StroLLer 25 134.78
- 
- */
-
-
