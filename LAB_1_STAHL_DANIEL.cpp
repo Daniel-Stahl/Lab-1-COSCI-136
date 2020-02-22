@@ -33,17 +33,40 @@ public:
     
     // File intake function
     
-    
-    
-    void PrintUnsortedInventory() {
-        cout << "Unsorted inventory:\n";
-        cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
+    void ProcessFile(ifstream& file) {
+        string itemID;
+        string itemName;
+        int itemQuantity;
+        double itemPrice;
         
-        for (int x = 0; x < unsortedInventory.size(); x++) {
-            cout << left << setw(10)<< unsortedInventory.at(x).itemID << setw(13) << unsortedInventory.at(x).itemName << setw(10) << unsortedInventory.at(x).itemQuantity << "$" << unsortedInventory.at(x).itemPrice << "\n";
+        if(!file) {
+            cout << "No file exists" << endl;
+            exit(1);
+        } else {
+            cout << "File ready!" << endl;
         }
-        cout << "\n";
-    };
+        
+        while(!file.eof() && unsortedInventory.size() != 10) { // Check if vector is full
+            file >> itemID >> itemName >> itemQuantity >> itemPrice;
+            
+            for (int x = 0; x < itemName.size(); x++) {
+                itemName[x] = tolower(itemName[x]);
+            }
+            
+            unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
+            sortedInventory.push_back(&unsortedInventory.back());
+            
+            if (unsortedInventory.size() == 10) {
+                cout << "This program can only process 10 items at a time" << endl;
+            }
+        }
+        
+        file.close();
+    }
+    
+    void LowercaseString(string testString, Item item) {
+        
+    }
     
     void Sort(int sortChoice) { // Sorts array of addresses by user input
         bool sortInventory = true;
@@ -128,6 +151,16 @@ public:
         << "Total worth of inventory: $" << sumPrice << "\n" << endl;
     }
     
+    void PrintUnsortedInventory() {
+        cout << "Unsorted inventory:\n";
+        cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
+        
+        for (int x = 0; x < unsortedInventory.size(); x++) {
+            cout << left << setw(10)<< unsortedInventory.at(x).itemID << setw(13) << unsortedInventory.at(x).itemName << setw(10) << unsortedInventory.at(x).itemQuantity << "$" << unsortedInventory.at(x).itemPrice << "\n";
+        }
+        cout << "\n";
+    };
+    
     void PrintSortOutput() { // Prints the output for sorted inventory
         cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
         
@@ -141,10 +174,6 @@ public:
 int main() {
     Inventory inventory;
     ifstream inFile;
-    string itemID;
-    string itemName;
-    int itemQuantity;
-    double itemPrice;
     int userSelection;
     int userSortSelection;
     string searchInventory;
@@ -154,33 +183,35 @@ int main() {
     
     inFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/data.txt");
     
-    if(!inFile) {
-        cout << "No file exists" << endl;
-        exit(1);
-    } else {
-        cout << "File ready!" << endl;
-    }
+    inventory.ProcessFile(inFile);
     
-    while(!inFile.eof() && inventory.unsortedInventory.size() != 10) { // Check if vector is full
-        inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
-        
-        for (int x = 0; x < itemName.size(); x++) {
-            itemName[x] = tolower(itemName[x]);
-        }
-        
-        inventory.unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
-        
-        if (inventory.unsortedInventory.size() == 10) {
-            cout << "This program can only process 10 items at a time" << endl;
-        }
-    }
-    
-    inFile.close();
+//    if(!inFile) {
+//        cout << "No file exists" << endl;
+//        exit(1);
+//    } else {
+//        cout << "File ready!" << endl;
+//    }
+//
+//    while(!inFile.eof() && inventory.unsortedInventory.size() != 10) { // Check if vector is full
+//        inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
+//
+//        for (int x = 0; x < itemName.size(); x++) {
+//            itemName[x] = tolower(itemName[x]);
+//        }
+//
+//        inventory.unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
+//
+//        if (inventory.unsortedInventory.size() == 10) {
+//            cout << "This program can only process 10 items at a time" << endl;
+//        }
+//    }
+//
+//    inFile.close();
     
     // try putting this after push_back unsorted
-    for (int x = 0; x < inventory.unsortedInventory.size(); x++) {
-        inventory.sortedInventory.push_back(&inventory.unsortedInventory.at(x));
-    }
+//    for (int x = 0; x < inventory.unsortedInventory.size(); x++) {
+//        inventory.sortedInventory.push_back(&inventory.unsortedInventory.at(x));
+//    }
     
     // put menu in Inventory via function
     cout << "Hello, please choose from the menu below\n" << endl;
