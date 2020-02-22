@@ -17,12 +17,9 @@ public:
     double itemPrice;
     
     Item(){};
-    Item(string itemID, string itemName, int itemQuantity, double itemPrice) {
+    Item(string newItemID, string newItemName, int newItemQty, double newItemPrice) {
         //One liners
-        this->itemID = itemID;
-        this->itemName = itemName;
-        this->itemQuantity = itemQuantity;
-        this->itemPrice = itemPrice;
+        itemID = newItemID; itemName = newItemName; itemQuantity = newItemQty; itemPrice = newItemPrice;
     };
 };
 
@@ -30,8 +27,6 @@ class Inventory {
 public:
     vector<Item>unsortedInventory;
     vector<Item*>sortedInventory;
-    
-    // File intake function
     
     void ProcessFile(ifstream& file) {
         string itemID;
@@ -49,12 +44,9 @@ public:
         while(!file.eof() && unsortedInventory.size() != 10) { // Check if vector is full
             file >> itemID >> itemName >> itemQuantity >> itemPrice;
             
-            for (int x = 0; x < itemName.size(); x++) {
-                itemName[x] = tolower(itemName[x]);
-            }
+            LowercaseString(itemName);
             
             unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
-            sortedInventory.push_back(&unsortedInventory.back());
             
             if (unsortedInventory.size() == 10) {
                 cout << "This program can only process 10 items at a time" << endl;
@@ -62,10 +54,16 @@ public:
         }
         
         file.close();
+        
+        for (int x = 0; x < unsortedInventory.size(); x++) {
+            sortedInventory.push_back(&unsortedInventory.at(x));
+        }
     }
     
-    void LowercaseString(string testString, Item item) {
-        
+    void LowercaseString(string& testString) {
+        for (int x = 0; x < testString.size(); x++) {
+            testString[x] = tolower(testString[x]);
+        }
     }
     
     void Sort(int sortChoice) { // Sorts array of addresses by user input
@@ -107,27 +105,38 @@ public:
         PrintSortOutput();
     }
     
-    void SearchInventory(string userSearch) { // Searches array for matching item ID or item name
-        for (int x = 0; x < userSearch.size(); x++) {
-            userSearch[x] = tolower(userSearch[x]);
-        }
-        
+    void SearchInventory() { // Searches array for matching item ID or item name
+        string userSearch;
         bool searchFound = false;
         
-        for (int y = 0; y < unsortedInventory.size(); y++) {
-            if (userSearch == unsortedInventory.at(y).itemID) {
-                cout << "\nFound a match in item ID\n";
-                PrintSearchOutput(y);
-                searchFound = true;
-            } else if (userSearch == unsortedInventory.at(y).itemName) {
-                cout << "\nFound a match in product name\n";
-                PrintSearchOutput(y);
-                searchFound = true;
+        while (userSearch != "back") {
+            cout << "\nPlease type the ID or product name you want to search for\n" << "(type back to return to the main menu)\n" << "Search: ";
+            cin >> userSearch;
+            
+            LowercaseString(userSearch);
+            
+            searchFound = false;
+            
+            if (userSearch != "back") {
+                for (int y = 0; y < unsortedInventory.size(); y++) {
+                    if (userSearch == unsortedInventory.at(y).itemID) {
+                        cout << "\nFound a match in item ID\n";
+                        PrintSearchOutput(y);
+                        searchFound = true;
+                        
+                    } else if (userSearch == unsortedInventory.at(y).itemName) {
+                        cout << "\nFound a match in product name\n";
+                        PrintSearchOutput(y);
+                        searchFound = true;
+                    }
+                }
+                
+                if (searchFound == false) {
+                    cout << "\nNo match found, please search again or type back to go to the main menu\n";
+                }
+            } else {
+                cout << "\nReturning to main menu\n";
             }
-        }
-        
-        if (searchFound == false) {
-            cout << "\nNo match found, returning to main menu.\n" << endl;
         }
     }
     
@@ -171,49 +180,24 @@ public:
     }
 };
 
+void MainMenu(Inventory inventory);
+
 int main() {
     Inventory inventory;
     ifstream inFile;
-    int userSelection;
-    int userSortSelection;
-    string searchInventory;
-    
-    
-    // File stuff goes in Inventory with a function
     
     inFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/data.txt");
     
     inventory.ProcessFile(inFile);
     
-//    if(!inFile) {
-//        cout << "No file exists" << endl;
-//        exit(1);
-//    } else {
-//        cout << "File ready!" << endl;
-//    }
-//
-//    while(!inFile.eof() && inventory.unsortedInventory.size() != 10) { // Check if vector is full
-//        inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
-//
-//        for (int x = 0; x < itemName.size(); x++) {
-//            itemName[x] = tolower(itemName[x]);
-//        }
-//
-//        inventory.unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
-//
-//        if (inventory.unsortedInventory.size() == 10) {
-//            cout << "This program can only process 10 items at a time" << endl;
-//        }
-//    }
-//
-//    inFile.close();
+    MainMenu(inventory);
+}
+
+void MainMenu(Inventory inventory) {
+    int userSelection;
+    int userSortSelection;
+    string searchInventory;
     
-    // try putting this after push_back unsorted
-//    for (int x = 0; x < inventory.unsortedInventory.size(); x++) {
-//        inventory.sortedInventory.push_back(&inventory.unsortedInventory.at(x));
-//    }
-    
-    // put menu in Inventory via function
     cout << "Hello, please choose from the menu below\n" << endl;
     
     do {
@@ -230,8 +214,8 @@ int main() {
             cin.ignore(100, '\n');
             cout << "\nSorry that is not one of the selections from the menu, please try again.\n" << endl;
         } else {
-        
-        // Switch menu
+            
+            // Switch menu
             switch (userSelection) {
                 case 1:
                     // Print unsorted inventory
@@ -259,16 +243,11 @@ int main() {
                     break;
                 case 3:
                     // Search product by ID or name
-                    cout << "\nPlease type the product you want to search?" << endl;
-                    cin >> searchInventory;
-                    inventory.SearchInventory(searchInventory);
+                    inventory.SearchInventory();
                     break;
                 case 4:
                     // Print inventory details
                     inventory.PrintInventoryReport();
-                    break;
-                default:
-                    cout << "\nSorry that is not one of the selections from the menu, please try again.\n" << endl;
                     break;
             }
         }
