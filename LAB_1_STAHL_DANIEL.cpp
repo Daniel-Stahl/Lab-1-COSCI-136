@@ -28,111 +28,60 @@ public:
 
 class Inventory {
 public:
-    
     vector<Item>unsortedInventory;
     vector<Item*>sortedInventory;
-//    string itemID;
-//    string itemName;
-//    int itemQuantity;
-//    double itemPrice;
     
-//    Inventory(){};
-//    Inventory(string itemID, string itemName, int itemQuantity, double itemPrice) {
-//        itemID = itemID;
-//        itemName = itemName;
-//        this->itemQuantity = itemQuantity;
-//        this->itemPrice = itemPrice;
-//    };
+    // File intake function
     
-    void PrintUnsortedInventory() { // Prints the unsorted array
-        cout << "Unsorted inventory:" << endl;
-        cout << left << setw(10)<< "Item ID" <<
-        setw(13) << "Item Name" <<
-        setw(10) << "Quantity" <<
-        setw(10) << "Price" << endl;
+    
+    
+    void PrintUnsortedInventory() {
+        cout << "Unsorted inventory:\n";
+        cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
-            cout << left << setw(10)<< unsortedInventory.at(x).itemID
-            << setw(13) << unsortedInventory.at(x).itemName
-            << setw(10) << unsortedInventory.at(x).itemQuantity
-            << "$" << unsortedInventory.at(x).itemPrice << "\n" << endl;
+            cout << left << setw(10)<< unsortedInventory.at(x).itemID << setw(13) << unsortedInventory.at(x).itemName << setw(10) << unsortedInventory.at(x).itemQuantity << "$" << unsortedInventory.at(x).itemPrice << "\n";
         }
+        cout << "\n";
     };
-    
-//    void Swap(Inventory*& itemA, Inventory*& itemB) { // Swaps items in the array
-//        Inventory* temp = itemA;
-//        itemA = itemB;
-//        itemB = temp;
-//    }
     
     void Sort(int sortChoice) { // Sorts array of addresses by user input
         bool sortInventory = true;
-        bool toSwap=false;
+        bool toSwap = false;
+        
         while (sortInventory) {
             sortInventory = false;
             
             for (int x = 0; x < sortedInventory.size()-1; x++) {
-            
                 switch (sortChoice) {
                     case 1:
                         // Item ID
-//                        if (sortedInventory.at(x)->itemID > sortedInventory.at(x+1)->itemID) {
-//                            Swap(sortedInventory.at(x), sortedInventory.at(x+1));
-//                            sortInventory = true;
-//                        }
                         toSwap = sortedInventory.at(x)->itemID > sortedInventory.at(x+1)->itemID;
                         break;
                     case 2:
                         // Product Name
-//                        if (sortedInventory.at(x)->itemName > sortedInventory.at(x+1)->itemName) {
-//                            Swap(sortedInventory.at(x), sortedInventory.at(x+1));
-//                            sortInventory = true;
-//                        }
                         toSwap = sortedInventory.at(x)->itemName > sortedInventory.at(x+1)->itemName;
                         break;
                     case 3:
                         // QTY
-//                        if (sortedInventory.at(x)->itemQuantity > sortedInventory.at(x+1)->itemQuantity) {
-//                            Swap(sortedInventory.at(x), sortedInventory.at(x+1));
-//                            sortInventory = true;
-//                        }
                         toSwap = sortedInventory.at(x)->itemQuantity > sortedInventory.at(x+1)->itemQuantity;
                         break;
                     case 4:
                         // Price
-//                        if (sortedInventory.at(x)->itemPrice > sortedInventory.at(x+1)->itemPrice) {
-//                            Swap(sortedInventory.at(x), sortedInventory.at(x+1));
-//                            sortInventory = true;
-//                        }
                         toSwap = sortedInventory.at(x)->itemPrice > sortedInventory.at(x+1)->itemPrice;
                         break;
-                 
                 }
                 
-                if(toSwap)
-                {
+                if(toSwap) {
                     Item* temp = sortedInventory.at(x);
                     sortedInventory.at(x) = sortedInventory.at(x+1);
                     sortedInventory.at(x+1) = temp;
-                    //toSwap = false;
                     sortInventory = true;
                 }
-                    
             }
         }
-        
-        cout << left << setw(10)<< "Item ID" <<
-        setw(13) << "Item Name" <<
-        setw(10) << "Quantity" <<
-        setw(10) << "Price" << endl;
-        
-        for (int x = 0; x < sortedInventory.size(); x++) {
-            cout << left << setw(10)<< sortedInventory.at(x)->itemID
-            << setw(13) << sortedInventory.at(x)->itemName
-            << setw(10) << sortedInventory.at(x)->itemQuantity
-            << "$" << sortedInventory.at(x)->itemPrice << "\n" << endl;
-            
-        }
+
+        PrintSortOutput();
     }
     
     void SearchInventory(string userSearch) { // Searches array for matching item ID or item name
@@ -145,27 +94,11 @@ public:
         for (int y = 0; y < unsortedInventory.size(); y++) {
             if (userSearch == unsortedInventory.at(y).itemID) {
                 cout << "\nFound a match in item ID\n";
-                cout << left << setw(10)<< "Item ID" <<
-                setw(13) << "Item Name" <<
-                setw(10) << "Quantity" <<
-                setw(10) << "Price" << endl;
-                cout << left << setw(10)<< unsortedInventory.at(y).itemID
-                << setw(13) << unsortedInventory.at(y).itemName
-                << setw(10) << unsortedInventory.at(y).itemQuantity
-                << "$" << unsortedInventory.at(y).itemPrice << "\n" << endl;
-            
+                PrintSearchOutput(y);
                 searchFound = true;
             } else if (userSearch == unsortedInventory.at(y).itemName) {
                 cout << "\nFound a match in product name\n";
-                cout << left << setw(10)<< "Item ID" <<
-                setw(13) << "Item Name" <<
-                setw(10) << "Quantity" <<
-                setw(10) << "Price\n"
-                        << left << setw(10)<< unsortedInventory.at(y).itemID
-                << setw(13) << unsortedInventory.at(y).itemName
-                << setw(10) << unsortedInventory.at(y).itemQuantity
-                << "$" << unsortedInventory.at(y).itemPrice << "\n" << endl;
-
+                PrintSearchOutput(y);
                 searchFound = true;
             }
         }
@@ -173,6 +106,10 @@ public:
         if (searchFound == false) {
             cout << "\nNo match found, returning to main menu.\n" << endl;
         }
+    }
+    
+    void PrintSearchOutput(int subscript) {
+        cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n" << left << setw(10) << unsortedInventory.at(subscript).itemID << setw(13) << unsortedInventory.at(subscript).itemName << setw(10) << unsortedInventory.at(subscript).itemQuantity << "$" << unsortedInventory.at(subscript).itemPrice << "\n" << endl;
     }
     
     void PrintInventoryReport() { // Prints a report of the entire inventory
@@ -190,13 +127,19 @@ public:
         << "Total quantity in stock: " << sumQuantity << "\n"
         << "Total worth of inventory: $" << sumPrice << "\n" << endl;
     }
+    
+    void PrintSortOutput() { // Prints the output for sorted inventory
+        cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
+        
+        for (int x = 0; x < sortedInventory.size(); x++) {
+            cout << left << setw(10)<< sortedInventory.at(x)->itemID << setw(13) << sortedInventory.at(x)->itemName << setw(10) << sortedInventory.at(x)->itemQuantity << "$" << sortedInventory.at(x)->itemPrice << "\n";
+        }
+        cout << "\n";
+    }
 };
 
 int main() {
-    vector<Item>unsortedInventory;
-    vector<Item*>sortedInventory;
     Inventory inventory;
-    Item item;
     ifstream inFile;
     string itemID;
     string itemName;
@@ -265,6 +208,7 @@ int main() {
                     break;
                 case 2:
                     // Print inventory sorted by user choice
+                    // Get user to go back to menu
                     cout << "\nHow would you like to sort the inventory?\n"
                     << "1) item ID\n"
                     << "2) item name\n"
