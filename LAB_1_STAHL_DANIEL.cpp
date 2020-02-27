@@ -18,7 +18,6 @@ public:
     
     Item(){};
     Item(string newItemID, string newItemName, int newItemQty, double newItemPrice) {
-        //One liners
         itemID = newItemID; itemName = newItemName; itemQuantity = newItemQty; itemPrice = newItemPrice;
     };
 };
@@ -28,21 +27,24 @@ public:
     vector<Item>unsortedInventory;
     vector<Item*>sortedInventory;
     
-    void ProcessFile(ifstream& file) {
+    void ProcessFile() {
+        ifstream inFile;
         string itemID;
         string itemName;
         int itemQuantity;
         double itemPrice;
         
-        if(!file) {
+        inFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/data.txt");
+        
+        if(!inFile) {
             cout << "No file exists" << endl;
             exit(1);
         } else {
             cout << "File ready!" << endl;
         }
         
-        while(!file.eof() && unsortedInventory.size() != 10) { // Check if vector is full
-            file >> itemID >> itemName >> itemQuantity >> itemPrice;
+        while(!inFile.eof()) { // Check if vector is full
+            inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
             
             LowercaseString(itemName);
             
@@ -53,7 +55,7 @@ public:
             }
         }
         
-        file.close();
+        inFile.close();
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
             sortedInventory.push_back(&unsortedInventory.at(x));
@@ -179,19 +181,19 @@ public:
     }
     
     void PrintUnsortedInventory() {
-        cout << "Unsorted inventory:\n" << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
+        cout << "Unsorted inventory:\n" << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << setw(8) << right <<"Price\n";
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
-            cout << left << setw(10)<< unsortedInventory.at(x).itemID << setw(13) << unsortedInventory.at(x).itemName << setw(10) << unsortedInventory.at(x).itemQuantity << "$" << unsortedInventory.at(x).itemPrice << "\n";
+            cout << left << setw(10)<< unsortedInventory.at(x).itemID << setw(13) << unsortedInventory.at(x).itemName << setw(8) << right << unsortedInventory.at(x).itemQuantity << setw(10) << right << unsortedInventory.at(x).itemPrice << "\n";
         }
         cout << "\n";
     };
     
     void PrintSortOutput() { // Prints the output for sorted inventory
-        cout << "Sorted inventory:\n" << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n";
+        cout << "Sorted inventory:\n" << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << setw(8) << right << "Price\n";
         
         for (int x = 0; x < sortedInventory.size(); x++) {
-            cout << left << setw(10)<< sortedInventory.at(x)->itemID << setw(13) << sortedInventory.at(x)->itemName << setw(10) << sortedInventory.at(x)->itemQuantity << "$" << sortedInventory.at(x)->itemPrice << "\n";
+            cout << left << setw(10)<< sortedInventory.at(x)->itemID << setw(13) << sortedInventory.at(x)->itemName << setw(8) << right << sortedInventory.at(x)->itemQuantity << setw(10) << right << sortedInventory.at(x)->itemPrice << "\n";
         }
         cout << "\n";
     }
@@ -201,11 +203,8 @@ void MainMenu(Inventory inventory);
 
 int main() {
     Inventory inventory;
-    ifstream inFile;
     
-    inFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/data.txt");
-    
-    inventory.ProcessFile(inFile);
+    inventory.ProcessFile();
     
     MainMenu(inventory);
 }
@@ -236,7 +235,6 @@ void MainMenu(Inventory inventory) {
                 case 2:
                     // Prints inventory sorted by user choice
                     inventory.Sort();
-                    
                     break;
                 case 3:
                     // Searchs product by ID or name
