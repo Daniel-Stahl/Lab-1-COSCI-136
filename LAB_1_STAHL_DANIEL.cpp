@@ -45,14 +45,9 @@ public:
         
         while(!inFile.eof()) { // Check if vector is full
             inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
-            
-            LowercaseString(itemName);
-            
+            MakeLowercase(itemName);
             unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
             
-            if (unsortedInventory.size() == 10) {
-                cout << "This program can only process 10 items at a time" << endl;
-            }
         }
         
         inFile.close();
@@ -62,32 +57,31 @@ public:
         }
     }
     
-    void LowercaseString(string& testString) {
+    void MakeLowercase(string& testString) {
         for (int x = 0; x < testString.size(); x++) {
             testString[x] = tolower(testString[x]);
         }
     }
     
-    void Sort() { // Sorts array of addresses by user input
-        // Get user to go back to menu
+    bool Sort() { // Sorts array of addresses by user input
         int userSortSelection;
         do {
-            cout << "How would you like to sort the inventory? (enter 5 to go back to the main menu)\n" << "1) item ID\n" << "2) item name\n" << "3) quantity on hand\n" << "4) price\n" << "5) Main Menu" << endl;
+            cout << "How would you like to sort the inventory? (enter 5 to go back to the main menu)\n" << "1) item ID\n" << "2) item name\n" << "3) quantity on hand\n" << "4) price\n" << "5) Print\n" << "6) Main Menu" << endl;
             cout << "Enter a number: ";
             cin >> userSortSelection;
             cout << "\n";
             
-            if (!cin || userSortSelection > 5) { // Checks if user input is valid
+            if (!cin || userSortSelection > 6) { // Checks if user input is valid
                 cin.clear();
                 cin.ignore(100, '\n');
                 cout << "Sorry that is not one of the selections from the menu, please try again.\n";
             } else {
                 // Sort here
-                bool sortInventory = true;
+                bool sorting = true;
                 bool toSwap = false;
                 
-                while (sortInventory) {
-                    sortInventory = false;
+                while (sorting) {
+                    sorting = false;
                     
                     for (int x = 0; x < sortedInventory.size()-1; x++) {
                         switch (userSortSelection) {
@@ -113,19 +107,25 @@ public:
                             Item* temp = sortedInventory.at(x);
                             sortedInventory.at(x) = sortedInventory.at(x+1);
                             sortedInventory.at(x+1) = temp;
-                            sortInventory = true;
+                            sorting = true;
                         }
                     }
                 }
                 
-                if (userSortSelection != 5) {
-                    PrintSortOutput();
+                if (!sorting && userSortSelection < 5) {
+                    cout << "Sort complete\n";
                 }
             }
-        } while (userSortSelection != 5);
+        } while (userSortSelection < 5);
+        
+        if (userSortSelection == 5) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
-    void SearchInventory() { // Searches array for matching item ID or item name
+    void SearchItem() { // Searches array for matching item ID or item name
         string userSearch;
         bool searchFound = false;
         
@@ -133,7 +133,7 @@ public:
             cout << "Please type the ID or product name you want to search for\n" << "(type main to return to the main menu)\n" << "Search: ";
             cin >> userSearch;
             
-            LowercaseString(userSearch);
+            MakeLowercase(userSearch);
             
             searchFound = false;
             
@@ -164,9 +164,9 @@ public:
         cout << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << "Price\n" << left << setw(10) << unsortedInventory.at(subscript).itemID << setw(13) << unsortedInventory.at(subscript).itemName << setw(10) << unsortedInventory.at(subscript).itemQuantity << "$" << unsortedInventory.at(subscript).itemPrice << "\n" << endl;
     }
     
-    void PrintInventoryReport() { // Prints a report of the entire inventory
+    void PrintReport() { // Prints a report of the entire inventory
         int sumItems = 0;
-        double sumPrice = 0;
+        double sumPrice = 0.0;
         int sumQuantity = 0;
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
@@ -177,10 +177,10 @@ public:
 
         cout << "\nNumber of unique items: " << sumItems << "\n"
         << "Total quantity in stock: " << sumQuantity << "\n"
-        << "Total worth of inventory: $" << sumPrice << "\n" << endl;
+        << "Total worth of inventory: $" << setprecision (2) << fixed << sumPrice << "\n" << endl;
     }
     
-    void PrintUnsortedInventory() {
+    void PrintUnsorted() {
         cout << "Unsorted inventory:\n" << left << setw(10)<< "Item ID" << setw(13) << "Item Name" << setw(10) << "Quantity" << setw(8) << right <<"Price\n";
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
@@ -203,9 +203,7 @@ void MainMenu(Inventory inventory);
 
 int main() {
     Inventory inventory;
-    
     inventory.ProcessFile();
-    
     MainMenu(inventory);
 }
 
@@ -230,19 +228,21 @@ void MainMenu(Inventory inventory) {
             switch (userSelection) {
                 case 1:
                     // Prints unsorted inventory
-                    inventory.PrintUnsortedInventory();
+                    inventory.PrintUnsorted();
                     break;
                 case 2:
                     // Prints inventory sorted by user choice
-                    inventory.Sort();
+                    if (inventory.Sort()) {
+                       inventory.PrintSortOutput();
+                    }
                     break;
                 case 3:
                     // Searchs product by ID or name
-                    inventory.SearchInventory();
+                    inventory.SearchItem();
                     break;
                 case 4:
                     // Prints inventory details
-                    inventory.PrintInventoryReport();
+                    inventory.PrintReport();
                     break;
             }
         }
