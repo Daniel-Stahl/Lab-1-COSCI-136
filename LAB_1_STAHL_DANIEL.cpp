@@ -1,4 +1,8 @@
 // Lab 1 Stahl, Daniel T TH
+/*
+ TODO list:
+ Check file for bad data
+*/
 
 #include <iostream>
 #include <fstream>
@@ -29,12 +33,14 @@ public:
     
     void ProcessFile() {
         ifstream inFile;
+        ofstream outFile;
         string itemID;
         string itemName;
         int itemQuantity;
         double itemPrice;
         
         inFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/data.txt");
+        outFile.open("/Users/stahl/Desktop/Pierce College/COSCI 136/lab 1 refresher/Error Log.txt");
         
         if(!inFile) {
             cout << "No file exists" << endl;
@@ -43,14 +49,20 @@ public:
             cout << "File ready!" << endl;
         }
         
-        while(!inFile.eof()) { // Check if vector is full
+        while(!inFile.eof()) {
             inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
-            MakeLowercase(itemName);
-            unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
-            
+            if (itemQuantity < 0 || itemPrice < 0) {
+                cout << "Something failed\n";
+                cout << itemID << " " << itemName << " " << itemQuantity << " " << itemPrice << "\n";
+                outFile << itemID << itemName << itemQuantity << itemPrice << "\n";
+            } else {
+                MakeLowercase(itemName);
+                unsortedInventory.push_back(Item(itemID, itemName, itemQuantity, itemPrice));
+            }
         }
         
         inFile.close();
+        outFile.close();
         
         for (int x = 0; x < unsortedInventory.size(); x++) {
             sortedInventory.push_back(&unsortedInventory.at(x));
