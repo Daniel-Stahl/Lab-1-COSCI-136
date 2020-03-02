@@ -1,8 +1,4 @@
 // Lab 1 Stahl, Daniel T TH
-/*
- TODO list:
- Check file for bad data
-*/
 
 #include <iostream>
 #include <fstream>
@@ -12,6 +8,8 @@
 #include <iomanip>
 
 using namespace std;
+
+void MakeLowercase(string& testString);
 
 class Item {
 public:
@@ -52,8 +50,8 @@ public:
         while(!inFile.eof()) {
             inFile >> itemID >> itemName >> itemQuantity >> itemPrice;
             if (itemQuantity < 0 || itemPrice < 0) {
-                cout << "Something failed\n";
-                cout << itemID << " " << itemName << " " << itemQuantity << " " << itemPrice << "\n";
+//                cout << "Something failed\n";
+//                cout << itemID << " " << itemName << " " << itemQuantity << " " << itemPrice << "\n";
                 outFile << itemID << itemName << itemQuantity << itemPrice << "\n";
             } else {
                 MakeLowercase(itemName);
@@ -69,16 +67,10 @@ public:
         }
     }
     
-    void MakeLowercase(string& testString) {
-        for (int x = 0; x < testString.size(); x++) {
-            testString[x] = tolower(testString[x]);
-        }
-    }
-    
     bool Sort() { // Sorts array of addresses by user input
         int userSortSelection;
         do {
-            cout << "How would you like to sort the inventory? (enter 5 to go back to the main menu)\n" << "1) item ID\n" << "2) item name\n" << "3) quantity on hand\n" << "4) price\n" << "5) Print\n" << "6) Main Menu" << endl;
+            cout << "How would you like to sort the inventory? (enter 6 to go back to the main menu)\n" << "1) item ID\n" << "2) item name\n" << "3) quantity on hand\n" << "4) price\n" << "5) Print\n" << "6) Main Menu" << endl;
             cout << "Enter a number: ";
             cin >> userSortSelection;
             cout << "\n";
@@ -259,4 +251,10 @@ void MainMenu(Inventory inventory) {
             }
         }
     } while (userSelection != 5);
+}
+
+void MakeLowercase(string& testString) {// make this a function
+    for (int x = 0; x < testString.size(); x++) {
+        testString[x] = tolower(testString[x]);
+    }
 }
