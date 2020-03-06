@@ -72,7 +72,7 @@ void MainMenu(Inventory inventory) { // Promts menus for user
         cin >> userSelection;
         cout << "\n";
         
-        if (!cin || userSelection > 5) { // Checks if user input is valid
+        if (!cin || userSelection > 5 || userSelection <= 0) { // Checks if user input is valid
             cin.clear();
             cin.ignore(100, '\n');
             cout << "Sorry that is not one of the selections from the menu, please try again." << endl;
@@ -158,7 +158,7 @@ void Inventory::SortMenu() { // Prompts the sort menu to user
         cin >> userSortSelection;
         cout << "\n";
         
-        if (!cin || userSortSelection > 5) {
+        if (!cin || userSortSelection > 5 || userSortSelection <= 0) {
             cin.clear();
             cin.ignore(100, '\n');
             cout << "Sorry that is not one of the selections from the menu, please try again.\n";
@@ -544,5 +544,116 @@ void Item::PrintItem() { // Prints a single item from inventory
  Enter a number: 5
  
  Program ended with exit code: 0
+ 
+ *Checking user input*
+ Main Menu
+ 1) Print unsorted inventory
+ 2) Print inventory sorted
+ 3) Look up item by ID or name
+ 4) Print report of inventory
+ 5) Quit program
+ Enter a number: X
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ 
+ Main Menu
+ 1) Print unsorted inventory
+ 2) Print inventory sorted
+ 3) Look up item by ID or name
+ 4) Print report of inventory
+ 5) Quit program
+ Enter a number: 0
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ Main Menu
+ 1) Print unsorted inventory
+ 2) Print inventory sorted
+ 3) Look up item by ID or name
+ 4) Print report of inventory
+ 5) Quit program
+ Enter a number: -9
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ 
+ -Sort input-
+ How would you like to sort the inventory? (enter 6 to go back to the main menu)
+ 1) item ID
+ 2) item name
+ 3) quantity on hand
+ 4) price
+ 5) Main Menu
+ Enter a number: 0
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ How would you like to sort the inventory? (enter 6 to go back to the main menu)
+ 1) item ID
+ 2) item name
+ 3) quantity on hand
+ 4) price
+ 5) Main Menu
+ Enter a number: F
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ How would you like to sort the inventory? (enter 6 to go back to the main menu)
+ 1) item ID
+ 2) item name
+ 3) quantity on hand
+ 4) price
+ 5) Main Menu
+ Enter a number: -3
+ 
+ Sorry that is not one of the selections from the menu, please try again.
+ 
+ -Search input-
+ Please type the ID or product name you want to search for
+ (type main to return to the main menu)
+ Search: Chicken
+ 
+ No match found, please search again or type back to go to the main menu
+ Please type the ID or product name you want to search for
+ (type main to return to the main menu)
+ Search: 125532
+ 
+ No match found, please search again or type back to go to the main menu
+ Please type the ID or product name you want to search for
+ (type main to return to the main menu)
+ Search: -334
+ 
+ No match found, please search again or type back to go to the main menu
+ Please type the ID or product name you want to search for
+ (type main to return to the main menu)
+ Search: 345tth5
+ 
+ No match found, please search again or type back to go to the main menu
+ 
+ *Data File*
+ 992837 Computer 4 299.99
+ 236627 iPad 7 399.99
+ 463526 iPhone 3 999.99
+ 987737 keyboard 10 19.99
+ 236684 lapToP 4 199.99
+ 345234 Microphone -5 -79.99
+ 123987 notebook 10 19.99
+ 674344 mouse 9 12.99
+ 544532 calculator 5 34.99
+ 456553 headphones 14 59.99
+ 847332 monitor 2 109.99
+ 992537 BAG 7 219.99
+ 245627 airPODS -30 149.99
+ 343526 iPhoneX 3 999.99
+ 907737 iPhoneXS 10 -1199.99
+ 236784 iMAC 7 2199.99
+ 345834 yoYO 5 11.99
+ 123457 NecklACE 10 459.99
+ 744344 PS4 9 479.99
+ 554532 SOCKS 5 34.99
+ 656553 SUNgLASSES 14 59.99
+ 848132 Fork 2 9.99
+ 
+ *Error File*
+ 345234 Microphone -5 -79.99
+ 245627 airPODS -30 149.99
+ 907737 iPhoneXS 10 -1199.99
+ 
 */
 
